@@ -1,0 +1,250 @@
+body {
+  font-family: 'Cairo', Arial, sans-serif;
+  background: linear-gradient(120deg, #f7f7f7 60%, #f4a26111 100%);
+  margin: 0;
+  padding: 0;
+  direction: rtl;
+  min-height: 100vh;
+}
+
+header {
+  background: none;
+  box-shadow: none;
+  border-bottom: 0;
+}
+
+nav input[type="text"] {
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  border: 1.5px solid #9a8c98;
+  width: 250px;
+  font-size: 1.1rem;
+  background: #f7f7f7;
+  color: #222;
+  box-shadow: 0 1px 4px #eee;
+  outline: none;
+  transition: box-shadow 0.2s;
+}
+
+#cart-icon {
+  background: #f4a261;
+  color: #fff;
+  padding: 7px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 1px 4px #f4a26144;
+}
+
+main {
+  padding: 2rem 1rem 0 1rem;
+  min-height: 60vh;
+}
+
+#games-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.game-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px #4a4e6922;
+  padding: 1.5rem 1.2rem 2rem 1.2rem;
+  text-align: center;
+  transition: box-shadow 0.2s, transform 0.2s;
+  border: 2px solid #fff;
+  position: relative;
+  min-height: 370px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.game-card:hover {
+  box-shadow: 0 8px 32px #4a4e6944;
+  transform: translateY(-6px) scale(1.04);
+  border: 2px solid #f4a261;
+}
+.game-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 14px;
+  margin-bottom: 0.9rem;
+  box-shadow: 0 2px 8px #eee;
+}
+.game-card h2 {
+  font-size: 1.25rem;
+  margin: 0.5rem 0 0.2rem 0;
+  color: #4a4e69;
+  font-family: 'Cairo', Arial, sans-serif;
+  font-weight: 700;
+}
+.game-card p {
+  color: #4a4e69;
+  margin: 0.2rem 0 0.5rem 0;
+  font-size: 1.05rem;
+}
+.game-card .badge {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  background: linear-gradient(90deg,#f4a261,#9a8c98);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px #f4a26144;
+}
+.game-card .featured {
+  border: 2px solid #f4a261;
+}
+.game-card .stars {
+  color: #f4a261;
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
+}
+.game-card button {
+  background: linear-gradient(90deg, #4a4e69, #9a8c98 80%, #f4a261 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.6rem 1.4rem;
+  font-size: 1.08rem;
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 0.7rem;
+  box-shadow: 0 1px 4px #eee;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.game-card button:hover {
+  background: linear-gradient(90deg, #f4a261, #9a8c98 80%, #4a4e69 100%);
+  box-shadow: 0 2px 8px #f4a26144;
+}
+.game-card del {
+  color: #888;
+  font-size: 1rem;
+}
+
+footer {
+  background: #22223b;
+  color: #fff;
+  text-align: center;
+  padding: 1.5rem 0;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+  border-radius: 18px 18px 0 0;
+  box-shadow: 0 -2px 12px #4a4e6922;
+}
+
+#checkout-section button {
+  background: linear-gradient(90deg, #4a4e69, #f4a261 80%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-radius: 12px;
+  border: none;
+  padding: 1rem 2.2rem;
+  margin-top: 1rem;
+  box-shadow: 0 2px 8px #eee;
+  transition: background 0.2s;
+}
+#checkout-section button:hover {
+  background: linear-gradient(90deg, #f4a261, #4a4e69 80%);
+}
+
+#auth-section, #profile-section {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px #4a4e6922;
+  padding: 2.2rem 1.5rem 1.5rem 1.5rem;
+  margin-bottom: 2.5rem;
+}
+#auth-section input, #auth-section button, #profile-section input, #profile-section button {
+  font-size: 1.08rem;
+}
+#auth-section button, #profile-section button {
+  background: linear-gradient(90deg, #4a4e69, #9a8c98 80%, #f4a261 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.6rem 1.4rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  box-shadow: 0 1px 4px #eee;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+#auth-section button:hover, #profile-section button:hover {
+  background: linear-gradient(90deg, #f4a261, #9a8c98 80%, #4a4e69 100%);
+  box-shadow: 0 2px 8px #f4a26144;
+}
+
+#address-modal > div, #payment-method-modal > div {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px #4a4e6922;
+  padding: 2rem 1.5rem;
+  min-width: 320px;
+  max-width: 90vw;
+}
+#address-modal input, #payment-method-modal button {
+  font-size: 1.08rem;
+}
+#address-modal button, #payment-method-modal button {
+  background: linear-gradient(90deg, #4a4e69, #9a8c98 80%, #f4a261 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.6rem 1.4rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  box-shadow: 0 1px 4px #eee;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+#address-modal button:hover, #payment-method-modal button:hover {
+  background: linear-gradient(90deg, #f4a261, #9a8c98 80%, #4a4e69 100%);
+  box-shadow: 0 2px 8px #f4a26144;
+}
+
+/* شريط مميز أعلى الصفحة */
+#top-banner {
+  width: 100vw;
+  background: linear-gradient(90deg,#f4a261,#9a8c98 80%,#4a4e69 100%);
+  color: #fff;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 0.7rem 0;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 8px #f4a26144;
+  margin-bottom: 1.2rem;
+}
+
+/* شريط إشعارات منبثقة */
+#toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg,#4a4e69,#f4a261 80%);
+  color: #fff;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  z-index: 9999;
+  font-size: 1.1rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px #4a4e6922;
+  animation: fadeInOut 2s;
+}
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; }
+}

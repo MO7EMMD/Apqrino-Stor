@@ -1,53 +1,77 @@
-<body>  
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Web Page Mohemmd Alsadig</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apqrino</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <header>
-        <h1>Welcome to My Web Page
-            Mohemmd Alsadig</h1>
-    </header>
-    <main>
-        <p>This is a simple web page created as an example.</p>
-        <p>Feel free to explore and learn more about web development!</p>
-        <img src="https://via.placeholder.com/150" alt="Placeholder Image">
-        <p>Check out my <a href="
-            <color: blue; text-decoration: none;">GitHub</a> for more projects.</p>
-    </main>
-
-    <nav>
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contant</a></li>
-        </ul>
+  <div style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(34,34,59,0.92);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:2rem;color:#fff;font-family:'Cairo',sans-serif;backdrop-filter:blur(2px);">
+    <span style="background:#f4a261;padding:1.2rem 2.5rem;border-radius:18px;box-shadow:0 2px 16px #22223b55;font-weight:bold;letter-spacing:2px;">الموقع ليس مكتمل بعد</span>
+    <span style="font-size:1.1rem;margin-top:1.5rem;color:#fff3e0;">نعتذر عن الإزعاج، سيتم إطلاق المتجر قريبًا.</span>
+  </div>
+  <header>
+    <h1 style="font-family: 'Cairo', sans-serif; font-size:2.5rem; letter-spacing:2px; color:#fff; display:flex; align-items:center; gap:18px; background:linear-gradient(90deg,#4a4e69,#9a8c98 70%,#f4a261 100%); padding:18px 0 18px 0; border-radius:0 0 24px 24px; box-shadow:0 4px 24px #4a4e6922; margin-bottom:1.5rem;">
+      <span style="font-weight:bold; color:#fff; background:linear-gradient(90deg,#4a4e69,#9a8c98); padding:8px 24px; border-radius:16px; box-shadow:0 2px 8px #eee; font-size:2.2rem; letter-spacing:3px;">Apqrino</span>
+      <span style="font-family:'Tajawal',sans-serif; font-size:1.4rem; color:#f4a261; font-weight:700; letter-spacing:1px; background:#fff3e0; border-radius:10px; padding:6px 18px; box-shadow:0 1px 4px #f4a26144;">عبقرينو</span>
+    </h1>
+    <nav style="display:flex;align-items:center;gap:18px;">
+      <input type="text" id="search" placeholder="ابحث عن لعبة..." style="padding:0.7rem 1.2rem; border-radius:8px; border:1.5px solid #9a8c98; font-size:1.1rem; background:#f7f7f7; color:#222; box-shadow:0 1px 4px #eee; outline:none; transition:box-shadow 0.2s;" />
+      <span id="cart-icon" style="margin-right:20px; font-size:1.1rem; background:#f4a261; color:#fff; padding:7px 18px; border-radius:8px; font-weight:600; box-shadow:0 1px 4px #f4a26144;">
+        🛒 سلة المشتريات (<span id="cart-count">0</span>)
+      </span>
     </nav>
-    <aside>
-        <h2>Latest News</h2>
-        <p>Stay tuned for updates on my latest projects and tutorials.</p>
-    </aside>
-    <section>
-        <h2>About Me</h2>
-        <p>I am a web developer with a passion for creating interactive and user-friendly websites.</p>
-        <p>In my free time, I enjoy learning new technologies and improving my skills.</p>
+  </header>
+  <main>
+    <section id="auth-section" style="max-width:400px;margin:2rem auto;display:none;">
+      <div id="auth-tabs" style="display:flex;justify-content:center;margin-bottom:1rem;">
+        <button id="show-login" style="flex:1;padding:0.5rem;">تسجيل الدخول</button>
+        <button id="show-register" style="flex:1;padding:0.5rem;">إنشاء حساب</button>
+      </div>
+      <form id="login-form" style="display:none;flex-direction:column;gap:1rem;">
+        <input type="email" id="login-email" placeholder="البريد الإلكتروني" required style="padding:0.5rem;" />
+        <input type="password" id="login-password" placeholder="كلمة المرور" required style="padding:0.5rem;" />
+        <button type="submit" style="padding:0.5rem;background:#4a4e69;color:#fff;border:none;border-radius:6px;">دخول</button>
+      </form>
+      <form id="register-form" style="display:none;flex-direction:column;gap:1rem;">
+        <input type="text" id="register-name" placeholder="الاسم الكامل" required style="padding:0.5rem;" />
+        <input type="email" id="register-email" placeholder="البريد الإلكتروني" required style="padding:0.5rem;" />
+        <input type="password" id="register-password" placeholder="كلمة المرور" required style="padding:0.5rem;" />
+        <button type="submit" style="padding:0.5rem;background:#22223b;color:#fff;border:none;border-radius:6px;">إنشاء حساب</button>
+      </form>
+      <div id="auth-message" style="margin-top:1rem;color:green;"></div>
     </section>
-    <section>
-        <h2>Contact Me</h2>
-        <p>If you have any questions or want to collaborate, feel free to reach out!</p>
-        <p>Email:mohemmdy.532@gmail.com <a href="mailto:
-
-    <footer>
-        <p>&copy; 2025 Mohemmd Alsadig. All rights reserved.</p>
-        <p>Follow me on social media for updates.</p>
-        <p>GitHub: <a href="
-    /
-            
-            <color: blue; text-decoration: none;">
-            <link rel="stylesheet" href="styles.css">
-            
-
+    <section id="games-list">
+      <!-- سيتم عرض الألعاب هنا -->
+    </section>
+    <section id="checkout-section" style="display:none; text-align:center; margin-top:2rem;">
+      <button id="checkout-btn" style="padding:1rem 2rem; font-size:1.1rem; background:#22223b; color:#fff; border:none; border-radius:8px; cursor:pointer;">ادفع الآن بفيزا / ماستركارد</button>
+      <div id="payment-message" style="margin-top:1rem; color:green;"></div>
+    </section>
+    <section id="profile-section" style="max-width:400px;margin:2rem auto;display:none;background:#fff;border-radius:16px;box-shadow:0 2px 12px #4a4e6922;padding:2rem 1.5rem 1.5rem 1.5rem;">
+      <h2 style="color:#4a4e69;text-align:center;margin-bottom:1.2rem;">الملف الشخصي</h2>
+      <div id="profile-info" style="font-size:1.1rem;color:#222;line-height:2;"></div>
+      <button id="edit-profile-btn" style="background:#f4a261;color:#fff;padding:0.5rem 1.2rem;border:none;border-radius:8px;margin-top:1rem;">تعديل البيانات</button>
+      <form id="edit-profile-form" style="display:none;flex-direction:column;gap:1rem;margin-top:1rem;">
+        <input type="text" id="profile-name" placeholder="الاسم الكامل" style="padding:0.5rem;" />
+        <input type="email" id="profile-email" placeholder="البريد الإلكتروني" style="padding:0.5rem;" />
+        <button type="submit" style="background:#4a4e69;color:#fff;padding:0.5rem 1.2rem;border:none;border-radius:8px;">حفظ التعديلات</button>
+      </form>
+      <div id="profile-message" style="margin-top:1rem;color:green;"></div>
+    </section>
+  </main>
+  <footer style="background:#22223b; color:#fff; text-align:center; padding:1.5rem 0; margin-top:2rem; font-size:1.1rem; border-radius:18px 18px 0 0; box-shadow:0 -2px 12px #4a4e6922;">
+    <p>جميع الحقوق محفوظة &copy; 2025</p>
+    <div style="margin-top:0.7rem;">
+      تواصل معنا: 
+      <a href="mailto:owner@apqrino.com" style="color:#f4a261; text-decoration:underline; margin:0 8px;">owner@apqrino.com</a>
+      |
+      <a href="https://wa.me/96891234567" target="_blank" style="color:#f4a261; text-decoration:underline; margin:0 8px;">واتساب</a>
+      |
+      <a href="https://t.me/apqrino" target="_blank" style="color:#f4a261; text-decoration:underline; margin:0 8px;">تيليجرام</a>
+    </div>
+  </footer>
+  <script src="main.js"></script>
+</body>
+</html>
