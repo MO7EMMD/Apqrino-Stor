@@ -252,12 +252,53 @@ function showAuthSection(show) {
   document.getElementById('checkout-section').style.display = show ? 'none' : (cart.length ? 'block' : 'none');
 }
 
-// عرض واجهة تسجيل الدخول عند أول زيارة إذا لم يكن المستخدم مسجلاً
-if (!localStorage.getItem('apqrino_user')) {
-  showAuthSection(true);
-} else {
-  showAuthSection(false);
+// إضافة خيار "تذكرني" في نموذج تسجيل الدخول
+const loginForm = document.getElementById('login-form');
+if (loginForm && !document.getElementById('remember-me')) {
+  const rememberDiv = document.createElement('div');
+  rememberDiv.style = 'display:flex;align-items:center;gap:7px;';
+  const rememberCheckbox = document.createElement('input');
+  rememberCheckbox.type = 'checkbox';
+  rememberCheckbox.id = 'remember-me';
+  rememberCheckbox.style = 'width:18px;height:18px;';
+  const rememberLabel = document.createElement('label');
+  rememberLabel.htmlFor = 'remember-me';
+  rememberLabel.textContent = 'حفظ الحساب';
+  rememberLabel.style = 'font-size:1rem;color:#4a4e69;';
+  rememberDiv.appendChild(rememberCheckbox);
+  rememberDiv.appendChild(rememberLabel);
+  loginForm.insertBefore(rememberDiv, loginForm.querySelector('button'));
 }
+
+// عند تسجيل الدخول، إذا تم اختيار "حفظ الحساب"، احفظ بيانات الدخول في localStorage
+loginForm && loginForm.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const remember = document.getElementById('remember-me').checked;
+  const user = JSON.parse(localStorage.getItem('apqrino_user') || '{}');
+  if (user.email === email && user.password === password) {
+    document.getElementById('auth-message').textContent = 'تم تسجيل الدخول بنجاح!';
+    if (remember) {
+      localStorage.setItem('apqrino_remember', JSON.stringify({ email, password }));
+    } else {
+      localStorage.removeItem('apqrino_remember');
+    }
+    setTimeout(()=>{ showAuthSection(false); }, 1000);
+  } else {
+    document.getElementById('auth-message').textContent = 'بيانات الدخول غير صحيحة';
+  }
+});
+
+// عند تحميل الصفحة، إذا كان هناك بيانات محفوظة، املأ الحقول تلقائياً
+window.addEventListener('DOMContentLoaded', function() {
+  const remembered = JSON.parse(localStorage.getItem('apqrino_remember') || 'null');
+  if (remembered) {
+    document.getElementById('login-email').value = remembered.email;
+    document.getElementById('login-password').value = remembered.password;
+    document.getElementById('remember-me').checked = true;
+  }
+});
 
 document.getElementById('show-login').onclick = function() {
   document.getElementById('login-form').style.display = 'flex';
@@ -422,19 +463,23 @@ function autoPurchase(method) {
     let user = JSON.parse(localStorage.getItem('apqrino_user') || '{}');
     if (!user.orders) user.orders = [];
     const address = JSON.parse(localStorage.getItem('apqrino_address') || '{}');
+    let paymentType = 'بطاقة إلكترونية';
+    if (method === 'mycashy') paymentType = 'ماي كاشي';
     user.orders.push({
       items: [...cart],
       date: new Date().toLocaleString('ar-EG'),
-      status: method === 'cod' ? 'بانتظار الدفع عند الاستلام' : 'قيد التنفيذ',
+      status: 'قيد التنفيذ',
       address,
-      payment: method === 'cod' ? 'الدفع عند الاستلام' : 'بطاقة إلكترونية'
+      payment: paymentType
     });
     localStorage.setItem('apqrino_user', JSON.stringify(user));
     // إفراغ السلة
     cart = [];
     updateCartCount();
     renderCart();
-    showToast(method === 'cod' ? 'تم تسجيل الطلب، سيتم التواصل معك للدفع عند الاستلام.' : 'تم الشراء بنجاح! الطلب قيد التنفيذ.');
+    let msg = 'تم الشراء بنجاح! الطلب قيد التنفيذ.';
+    if (method === 'mycashy') msg = 'تم تسجيل الطلب، سيتم مراجعته بعد الدفع عبر ماي كاشي.';
+    showToast(msg);
   }
 }
 // استدعاء autoPurchase بعد الدفع (محاكاة)
@@ -531,7 +576,8 @@ function autoPurchase() {
       items: [...cart],
       date: new Date().toLocaleString('ar-EG'),
       status: 'قيد التنفيذ',
-      address
+      address,
+      payment: 'بطاقة إلكترونية'
     });
     localStorage.setItem('apqrino_user', JSON.stringify(user));
     cart = [];
@@ -571,7 +617,8 @@ function showPaymentMethodModal() {
       <div style="background:#fff;padding:2rem 1.5rem;border-radius:16px;min-width:320px;max-width:90vw;box-shadow:0 2px 16px #22223b44;">
         <h3 style="color:#4a4e69;">اختر طريقة الدفع</h3>
         <button id="pay-card" style="background:#4a4e69;color:#fff;padding:0.7rem 1.5rem;border:none;border-radius:8px;margin-bottom:1rem;width:100%;font-size:1.1rem;">بطاقة فيزا/ماستركارد</button>
-        <button id="pay-cod" style="background:#f4a261;color:#fff;padding:0.7rem 1.5rem;border:none;border-radius:8px;width:100%;font-size:1.1rem;">الدفع عند الاستلام</button>
+        <button id="pay-bankak" style="background:#2d6a4f;color:#fff;padding:0.7rem 1.5rem;border:none;border-radius:8px;margin-bottom:1rem;width:100%;font-size:1.1rem;">الدفع عبر بنكك</button>
+        <button id="pay-mycashy" style="background:#f4a261;color:#fff;padding:0.7rem 1.5rem;border:none;border-radius:8px;margin-bottom:1rem;width:100%;font-size:1.1rem;">الدفع عبر ماي كاشي</button>
         <button id="close-payment-method-modal" style="margin-top:1rem;background:#e63946;color:#fff;padding:0.3rem 1rem;border:none;border-radius:6px;">إغلاق</button>
       </div>
     `;
@@ -581,15 +628,21 @@ function showPaymentMethodModal() {
     };
     document.getElementById('pay-card').onclick = function() {
       modal.remove();
-      // تابع الدفع الإلكتروني
       document.getElementById('payment-message').textContent = 'سيتم تحويلك لبوابة الدفع الآمنة.';
       window.open('https://buy.stripe.com/test_00g7uQ2wA2wQ0yQeUU', '_blank');
       setTimeout(autoPurchase, 4000); // محاكاة نجاح الدفع بعد 4 ثوانٍ
     };
-    document.getElementById('pay-cod').onclick = function() {
+    document.getElementById('pay-bankak').onclick = function() {
       modal.remove();
-      // تابع الدفع عند الاستلام
-      autoPurchase('cod');
+      document.getElementById('bankak-form').style.display = 'block';
+      document.getElementById('bankak-message').textContent = '';
+    };
+    document.getElementById('pay-mycashy').onclick = function() {
+      modal.remove();
+      document.getElementById('payment-message').innerHTML = '<div style="color:#222;background:#fff3e0;padding:1rem 1.2rem;border-radius:10px;margin:1rem auto;max-width:350px;">يرجى الدفع عبر تطبيق <b>ماي كاشي</b> إلى رقم الحساب التالي:<br><span style="color:#f4a261;font-size:1.2rem;font-weight:bold;direction:ltr;">635901</span><br>ثم تأكيد العملية من خلال التواصل مع الدعم.</div>';
+      setTimeout(function() {
+        autoPurchase('mycashy');
+      }, 4000); // محاكاة نجاح الدفع بعد 4 ثوانٍ
     };
   }
 }
@@ -600,5 +653,136 @@ if (checkoutBtn) {
     e.preventDefault();
     showOrderSummary();
     showPaymentMethodModal();
+  };
+}
+
+// إضافة منطق إظهار نموذج بنكك والتعامل مع بيانات التحويل
+const bankakBtn = document.getElementById('bankak-btn');
+const bankakForm = document.getElementById('bankak-form');
+const submitBankak = document.getElementById('submit-bankak');
+const bankakMessage = document.getElementById('bankak-message');
+
+if (bankakBtn && bankakForm && submitBankak) {
+  bankakBtn.onclick = () => {
+    bankakForm.style.display = bankakForm.style.display === 'none' ? 'block' : 'none';
+  };
+  submitBankak.onclick = (e) => {
+    e.preventDefault();
+    const txid = document.getElementById('bankak-txid').value.trim();
+    const proof = document.getElementById('bankak-proof').files[0];
+    if (!txid) {
+      bankakMessage.style.color = 'red';
+      bankakMessage.textContent = 'يرجى إدخال رقم العملية البنكية.';
+      return;
+    }
+    bankakMessage.style.color = 'green';
+    bankakMessage.textContent = 'تم استلام بيانات التحويل. سيتم مراجعتها من الإدارة.';
+    // هنا يمكنك حفظ بيانات التحويل في localStorage أو إرسالها للسيرفر لاحقاً
+    document.getElementById('bankak-txid').value = '';
+    document.getElementById('bankak-proof').value = '';
+    setTimeout(() => { bankakForm.style.display = 'none'; bankakMessage.textContent = ''; }, 2500);
+  };
+}
+
+// دعم تعدد العملات (جنيه سوداني و ريال عماني)
+const currencyRates = { SDG: 1, OMR: 0.0007 };
+let currentCurrency = localStorage.getItem('apqrino_currency') || 'SDG';
+const currencySelect = document.getElementById('currency-select');
+if (currencySelect) {
+  currencySelect.value = currentCurrency;
+  currencySelect.onchange = function() {
+    currentCurrency = this.value;
+    localStorage.setItem('apqrino_currency', currentCurrency);
+    updateAllPrices();
+  };
+}
+function updateAllPrices() {
+  document.querySelectorAll('[data-price-sdg]').forEach(el => {
+    const priceSDG = parseFloat(el.getAttribute('data-price-sdg'));
+    let price = priceSDG;
+    let symbol = 'ج.س';
+    if (currentCurrency === 'OMR') {
+      price = (priceSDG * currencyRates.OMR).toFixed(3);
+      symbol = 'ر.ع';
+    }
+    el.textContent = price + ' ' + symbol;
+  });
+}
+
+// بوت تحديث أسعار العملات تلقائياً من الإنترنت
+async function updateCurrencyRates() {
+  try {
+    // مثال: استخدام API مجاني (exchangerate-api.com أو أي مصدر آخر)
+    const res = await fetch('https://api.exchangerate-api.com/v4/latest/SDG');
+    const data = await res.json();
+    if (data && data.rates) {
+      // تحديث سعر الريال العماني مقابل الجنيه السوداني
+      currencyRates.OMR = data.rates.OMR || currencyRates.OMR;
+      localStorage.setItem('apqrino_rates', JSON.stringify(currencyRates));
+      updateAllPrices();
+    }
+  } catch (e) {
+    // في حال فشل الجلب، استخدم السعر القديم
+  }
+}
+// تحميل أسعار محفوظة عند بدء التشغيل
+const savedRates = localStorage.getItem('apqrino_rates');
+if (savedRates) {
+  Object.assign(currencyRates, JSON.parse(savedRates));
+}
+updateCurrencyRates();
+setInterval(updateCurrencyRates, 1000 * 60 * 60 * 6); // يحدث كل 6 ساعات
+
+// إظهار طبقة الإغلاق لمدة نصف ساعة ثم إخفاؤها، ثم إعادة إظهارها بعد نصف ساعة
+(function() {
+  const overlay = document.querySelector('body > div[style*="position:fixed"]');
+  if (overlay) {
+    overlay.style.display = 'flex';
+    setTimeout(() => {
+      overlay.style.display = 'none';
+      setTimeout(() => {
+        overlay.style.display = 'flex';
+      }, 30 * 60 * 1000);
+    }, 30 * 60 * 1000);
+  }
+})();
+
+// ====== منطق شحن فري فاير ======
+const ffForm = document.getElementById('ff-form');
+if (ffForm) {
+  ffForm.onsubmit = function(e) {
+    e.preventDefault();
+    const userId = document.getElementById('ff-userid').value.trim();
+    const pkg = document.getElementById('ff-package').value;
+    if (!userId) {
+      document.getElementById('ff-message').style.color = 'red';
+      document.getElementById('ff-message').textContent = 'يرجى إدخال معرف اللاعب.';
+      return;
+    }
+    // أسعار الباقات حسب العملة
+    const currency = document.getElementById('currency-select').value;
+    const prices = {
+      SDG: { '100': 1500, '210': 2900, '530': 6900, '1080': 12900, '2200': 24900 },
+      OMR: { '100': 1.2, '210': 2.3, '530': 5.5, '1080': 10.5, '2200': 20 }
+    };
+    const price = prices[currency][pkg];
+    // إضافة للسلة
+    const item = {
+      id: 'ff-' + pkg,
+      name: `فري فاير - ${pkg} جوهرة`,
+      userId,
+      price,
+      currency,
+      qty: 1,
+      type: 'freefire'
+    };
+    let cart = JSON.parse(localStorage.getItem('apqrino_cart') || '[]');
+    cart.push(item);
+    localStorage.setItem('apqrino_cart', JSON.stringify(cart));
+    document.getElementById('ff-message').style.color = 'green';
+    document.getElementById('ff-message').textContent = 'تمت إضافة الباقة للسلة بنجاح!';
+    updateCartCount && updateCartCount();
+    setTimeout(()=>{ document.getElementById('ff-message').textContent = ''; }, 2000);
+    ffForm.reset();
   };
 }
