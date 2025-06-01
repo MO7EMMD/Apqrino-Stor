@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>منصة عبقرينو للعملات | Apqrino Currency</title>
+  <meta name="description" content="منصة عبقرينو - أسعار العملات لحظة بلحظة، محول عملات، أخبار وتحليلات، دعم فوري، حماية متقدمة. يدعم الجنيه السوداني، الريال العماني، الدولار، اليورو، الريال السعودي، الدرهم الإماراتي والمزيد." />
+  <meta name="keywords" content="أسعار العملات, محول عملات, عبقرينو, عملات, دولار, جنيه سوداني, ريال عماني, يورو, ريال سعودي, درهم إماراتي, تحويل, أسعار, فوركس, دعم, حماية" />
+  <meta name="author" content="Apqrino Currency" />
+  <meta property="og:title" content="منصة عبقرينو للعملات | Apqrino Currency" />
+  <meta property="og:description" content="أسعار العملات لحظة بلحظة، محول عملات، أخبار وتحليلات، دعم فوري، حماية متقدمة." />
+  <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" />
+  <meta property="og:url" content="https://your-github-username.github.io/your-repo-name/" />
+  <link rel="canonical" href="https://your-github-username.github.io/your-repo-name/" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="منصة عبقرينو للعملات | Apqrino Currency" />
+  <meta name="twitter:description" content="أسعار العملات لحظة بلحظة، محول عملات، أخبار وتحليلات، دعم فوري، حماية متقدمة." />
+  <meta name="twitter:image" content="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" />
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#232f3e" />
+  <meta name="google-site-verification" content="google6771b5583cda5ad3" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  <!-- Google AdSense (replace ca-pub-XXXXXXXXXXXX with your real publisher ID) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <style>
+    body { background:#f3f3f3; font-family:'Cairo',sans-serif; }
+    header, footer, main, section, div, input, select, button { box-sizing: border-box; }
+    /* ... باقي التنسيقات من style.css ... */
+    .adsbygoogle { min-height:90px; }
+    #toast-container > div { margin-bottom:10px; }
+    @media (max-width: 700px) {
+      header > div, main { padding: 8px !important; }
+      #currencies-table, #news-list, #about-section, #profit-section { padding: 1rem 0.3rem !important; }
+    }
+  </style>
+</head>
+<body>
+  <!-- وحدة إعلان أفقي أعلى الصفحة -->
+  <div style="max-width:1200px;margin:0 auto;">
+    <ins class="adsbygoogle"
+      style="display:block;text-align:center;margin:18px auto 0 auto;min-height:90px;"
+      data-ad-client="ca-pub-XXXXXXXXXXXX"
+      data-ad-slot="1234567890"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+  <header style="background:#232f3e;padding:0 0 12px 0;box-shadow:0 2px 12px #232f3e22;">
+    <div style="display:flex;align-items:center;gap:18px;justify-content:space-between;max-width:1200px;margin:0 auto;padding:12px 18px;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="شعار العملات" style="width:54px;height:54px;object-fit:contain;border-radius:10px;background:#fff;box-shadow:0 2px 8px #232f3e22;">
+        <span style="font-size:2.1rem;font-weight:bold;color:#ff9900;letter-spacing:2px;font-family:'Cairo',sans-serif;">Apqrino Currency</span>
+      </div>
+      <div style="flex:1;max-width:500px;margin:0 24px;">
+        <input type="text" id="search-currency" placeholder="ابحث عن عملة أو رمز..." style="width:100%;padding:0.7rem 1.2rem;border-radius:6px;border:1.5px solid #ddd;font-size:1.1rem;background:#fff;box-shadow:0 1px 4px #eee;outline:none;">
+      </div>
+      <div style="display:flex;align-items:center;gap:18px;">
+        <button id="open-converter" style="background:#ff9900;color:#fff;padding:0.7rem 1.5rem;border:none;border-radius:8px;font-size:1.1rem;font-weight:bold;box-shadow:0 1px 4px #ff990044;">محول العملات</button>
+      </div>
+    </div>
+    <nav style="background:#131921;padding:8px 0;">
+      <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:24px;padding:0 18px;">
+        <a href="#" style="color:#fff;font-size:1.1rem;text-decoration:none;padding:6px 12px;border-radius:6px;">الرئيسية</a>
+        <a href="#currencies-section" style="color:#fff;font-size:1.1rem;text-decoration:none;padding:6px 12px;border-radius:6px;">أسعار العملات</a>
+        <a href="#news-section" style="color:#fff;font-size:1.1rem;text-decoration:none;padding:6px 12px;border-radius:6px;">أخبار العملات</a>
+        <a href="#about-section" style="color:#fff;font-size:1.1rem;text-decoration:none;padding:6px 12px;border-radius:6px;">عن المنصة</a>
+        <a href="privacy.html" style="color:#fff;font-size:1.1rem;text-decoration:none;padding:6px 12px;border-radius:6px;">سياسة الخصوصية</a>
+      </div>
+    </nav>
+  </header>
+  <main style="max-width:1200px;margin:0 auto;padding:24px 0;">
+    <section id="currencies-section" style="margin-bottom:2.5rem;">
+      <h1 style="color:#232f3e;text-align:center;font-size:2.2rem;margin-bottom:1.5rem;">أسعار العملات الرئيسية اليوم</h1>
+      <div id="currencies-table" style="background:#fff;border-radius:14px;box-shadow:0 2px 12px #232f3e22;padding:2rem 1.2rem;overflow-x:auto;">
+        <!-- سيتم تعبئة جدول العملات ديناميكياً -->
+      </div>
+    </section>
+    <section id="converter-section" style="display:none;margin-bottom:2.5rem;">
+      <h2 style="color:#4a4e69;text-align:center;font-size:1.5rem;margin-bottom:1.2rem;">محول العملات</h2>
+      <div style="background:#fff;border-radius:14px;box-shadow:0 2px 12px #232f3e22;padding:2rem 1.2rem;max-width:500px;margin:0 auto;">
+        <form id="currency-converter-form" style="display:flex;flex-direction:column;gap:1.2rem;">
+          <div style="display:flex;gap:1rem;align-items:center;">
+            <input type="number" id="amount" placeholder="المبلغ" min="0" style="flex:1;padding:0.7rem;border-radius:8px;border:1.5px solid #ddd;font-size:1.1rem;" required />
+            <select id="from-currency" style="padding:0.7rem;border-radius:8px;border:1.5px solid #ddd;font-size:1.1rem;"></select>
+            <span style="font-size:1.5rem;">→</span>
+            <select id="to-currency" style="padding:0.7rem;border-radius:8px;border:1.5px solid #ddd;font-size:1.1rem;"></select>
+          </div>
+          <button type="submit" style="background:#ff9900;color:#fff;padding:0.7rem 2.2rem;border:none;border-radius:8px;font-size:1.1rem;font-weight:bold;">تحويل</button>
+        </form>
+        <div id="converter-result" style="margin-top:1.2rem;color:#222;font-size:1.2rem;text-align:center;"></div>
+      </div>
+    </section>
+    <section id="news-section" style="margin-bottom:2.5rem;">
+      <h2 style="color:#232f3e;text-align:center;font-size:1.5rem;margin-bottom:1.2rem;">آخر أخبار وتحليلات العملات</h2>
+      <div id="news-list" style="background:#fff;border-radius:14px;box-shadow:0 2px 12px #232f3e22;padding:2rem 1.2rem;">
+        <!-- سيتم تعبئة الأخبار ديناميكياً -->
+      </div>
+    </section>
+    <section id="about-section" style="margin-bottom:2.5rem;">
+      <h2 style="color:#232f3e;text-align:center;font-size:1.5rem;margin-bottom:1.2rem;">عن منصة عبقرينو للعملات</h2>
+      <div style="background:#fff;border-radius:14px;box-shadow:0 2px 12px #232f3e22;padding:2rem 1.2rem;max-width:700px;margin:0 auto;font-size:1.1rem;color:#222;">
+        منصة عبقرينو للعملات تقدم لك أحدث أسعار العملات العالمية والمحلية، محول عملات دقيق، أخبار وتحليلات اقتصادية، دعم فوري، وبوت حماية متقدم. هدفنا الشفافية والسرعة والدقة في نقل أسعار العملات.
+      </div>
+    </section>
+    <section id="profit-section" style="margin-bottom:2.5rem;">
+      <h2 style="color:#232f3e;text-align:center;font-size:1.5rem;margin-bottom:1.2rem;">طرق الربح من المنصة</h2>
+      <div style="background:#fff;border-radius:14px;box-shadow:0 2px 12px #232f3e22;padding:2rem 1.2rem;max-width:700px;margin:0 auto;font-size:1.1rem;color:#222;">
+        <ul style="padding-right:18px;">
+          <li><b>إعلانات Google AdSense:</b> عرض إعلانات تلقائية في الموقع والربح من الزيارات والنقرات.</li>
+          <li><b>التسويق بالعمولة:</b> الترويج لخدمات أو منصات مالية عبر روابط إحالة وربح عمولة على كل عملية.</li>
+          <li><b>بيع خدمات إعلانية مباشرة:</b> عرض بانرات أو مقالات إعلانية مدفوعة لجهات مالية أو صرافات.</li>
+          <li><b>بيع منتجات رقمية:</b> مثل تقارير أو أدوات تحويل عملات متقدمة (مستقبلاً).</li>
+        </ul>
+        <div style="margin-top:1.2rem;color:#4a4e69;">للاستفسار عن الإعلانات أو التعاون التجاري: <a href="mailto:owner@apqrino.com" style="color:#ff9900;">owner@apqrino.com</a></div>
+      </div>
+    </section>
+  </main>
+  <footer style="background:#232f3e;color:#fff;text-align:center;padding:1.5rem 0;margin-top:2rem;font-size:1.1rem;border-radius:18px 18px 0 0;box-shadow:0 -2px 12px #232f3e22;">
+    <div style="max-width:1200px;margin:0 auto;display:flex;flex-direction:column;align-items:center;">
+      <div style="display:flex;gap:18px;align-items:center;margin-bottom:0.7rem;">
+        <a href="#" style="color:#fff;text-decoration:none;font-weight:bold;font-size:1.1rem;">الرئيسية</a>
+        <a href="#currencies-section" style="color:#fff;text-decoration:none;font-weight:bold;font-size:1.1rem;">أسعار العملات</a>
+        <a href="#news-section" style="color:#fff;text-decoration:none;font-weight:bold;font-size:1.1rem;">أخبار العملات</a>
+        <a href="#about-section" style="color:#fff;text-decoration:none;font-weight:bold;font-size:1.1rem;">عن المنصة</a>
+        <a href="privacy.html" style="color:#fff;text-decoration:none;font-weight:bold;font-size:1.1rem;">سياسة الخصوصية</a>
+      </div>
+      <p style="margin:0;">جميع الحقوق محفوظة &copy; 2025</p>
+      <div style="margin-top:0.7rem;">
+        تواصل معنا:
+        <a href="mailto:owner@apqrino.com" style="color:#ff9900;text-decoration:underline;margin:0 8px;">owner@apqrino.com</a>
+        |
+        <a href="https://wa.me/96878008199" target="_blank" style="color:#ff9900;text-decoration:underline;margin:0 8px;">واتساب</a>
+        |
+        <a href="https://t.me/apqrino" target="_blank" style="color:#ff9900;text-decoration:underline;margin:0 8px;">تيليجرام</a>
+      </div>
+    </div>
+  </footer>
+  <div id="toast-container" style="position:fixed;bottom:32px;left:50%;transform:translateX(-50%);z-index:99999;"></div>
+  <script>
+// ========== main.js مدمج بالكامل ==========
+// قائمة العملات الرئيسية
+const mainCurrencies = [
+  { code: 'SDG', name: 'جنيه سوداني' },
+  { code: 'OMR', name: 'ريال عماني' },
+  { code: 'USD', name: 'دولار أمريكي' },
+  { code: 'EUR', name: 'يورو' },
+  { code: 'SAR', name: 'ريال سعودي' },
+  { code: 'AED', name: 'درهم إماراتي' }
+];
+let rates = {};
+// جلب أسعار العملات من API
+async function fetchRates() {
+  try {
+    const res = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+    const data = await res.json();
+    rates = data.rates;
+    renderCurrenciesTable();
+    fillConverterSelects();
+  } catch (e) {
+    document.getElementById('currencies-table').innerHTML = '<div style="color:red;text-align:center;">تعذر جلب أسعار العملات حالياً.</div>';
+  }
+}
+fetchRates();
+setInterval(fetchRates, 1000 * 60 * 10);
+function renderCurrenciesTable() {
+  let html = '<table style="width:100%;border-collapse:collapse;font-size:1.1rem;">';
+  html += '<tr style="background:#f4a261;color:#fff;"><th style="padding:0.7rem;">العملة</th><th style="padding:0.7rem;">السعر مقابل الدولار</th></tr>';
+  mainCurrencies.forEach(cur => {
+    html += `<tr style="border-bottom:1px solid #eee;">
+      <td style="padding:0.7rem;">${cur.name} (${cur.code})</td>
+      <td style="padding:0.7rem;">${rates[cur.code] ? rates[cur.code].toLocaleString('ar-EG', {maximumFractionDigits: 4}) : '-'}</td>
+    </tr>`;
+  });
+  html += '</table>';
+  document.getElementById('currencies-table').innerHTML = html;
+}
+function fillConverterSelects() {
+  const from = document.getElementById('from-currency');
+  const to = document.getElementById('to-currency');
+  if (!from || !to) return;
+  from.innerHTML = '';
+  to.innerHTML = '';
+  mainCurrencies.forEach(cur => {
+    from.innerHTML += `<option value="${cur.code}">${cur.name} (${cur.code})</option>`;
+    to.innerHTML += `<option value="${cur.code}">${cur.name} (${cur.code})</option>`;
+  });
+  from.value = 'USD';
+  to.value = 'SDG';
+}
+document.getElementById('open-converter').onclick = function() {
+  document.getElementById('converter-section').style.display = 'block';
+  window.scrollTo({top: document.getElementById('converter-section').offsetTop - 40, behavior: 'smooth'});
+};
+document.getElementById('currency-converter-form').onsubmit = function(e) {
+  e.preventDefault();
+  const amount = parseFloat(document.getElementById('amount').value);
+  const from = document.getElementById('from-currency').value;
+  const to = document.getElementById('to-currency').value;
+  if (!rates[from] || !rates[to]) {
+    document.getElementById('converter-result').textContent = 'تعذر التحويل حالياً.';
+    return;
+  }
+  const usdAmount = from === 'USD' ? amount : amount / rates[from];
+  const result = to === 'USD' ? usdAmount : usdAmount * rates[to];
+  document.getElementById('converter-result').textContent = `${amount} ${from} = ${result.toLocaleString('ar-EG', {maximumFractionDigits: 4})} ${to}`;
+};
+const searchInput = document.getElementById('search-currency');
+searchInput.addEventListener('input', function() {
+  const q = this.value.trim().toLowerCase();
+  let filtered = mainCurrencies.filter(cur => cur.name.includes(q) || cur.code.toLowerCase().includes(q));
+  if (filtered.length === 0) filtered = mainCurrencies;
+  let html = '<table style="width:100%;border-collapse:collapse;font-size:1.1rem;">';
+  html += '<tr style="background:#f4a261;color:#fff;"><th style="padding:0.7rem;">العملة</th><th style="padding:0.7rem;">السعر مقابل الدولار</th></tr>';
+  filtered.forEach(cur => {
+    html += `<tr style="border-bottom:1px solid #eee;">
+      <td style="padding:0.7rem;">${cur.name} (${cur.code})</td>
+      <td style="padding:0.7rem;">${rates[cur.code] ? rates[cur.code].toLocaleString('ar-EG', {maximumFractionDigits: 4}) : '-'}</td>
+    </tr>`;
+  });
+  html += '</table>';
+  document.getElementById('currencies-table').innerHTML = html;
+});
+function fetchNews() {
+  const news = [
+    { title: 'ارتفاع سعر الدولار مقابل الجنيه السوداني', date: '2025-06-01', desc: 'شهد سعر الدولار ارتفاعاً ملحوظاً اليوم مقابل الجنيه السوداني في السوق الموازي.' },
+    { title: 'استقرار الريال العماني أمام العملات الرئيسية', date: '2025-06-01', desc: 'سجل الريال العماني استقراراً في أسعاره أمام الدولار واليورو.' },
+    { title: 'تحليل: توقعات أسعار العملات في الأسبوع القادم', date: '2025-05-31', desc: 'محللون يتوقعون تذبذباً في أسعار العملات بسبب الأحداث الاقتصادية العالمية.' }
+  ];
+  let html = '';
+  news.forEach(n => {
+    html += `<div style='margin-bottom:1.2rem;'><b style='color:#4a4e69;'>${n.title}</b> <span style='color:#888;font-size:0.95em;'>(${n.date})</span><div style='color:#222;margin-top:0.3rem;'>${n.desc}</div></div>`;
+  });
+  document.getElementById('news-list').innerHTML = html;
+}
+fetchNews();
+// ====== بوت حماية: تنبيه عند محاولات مشبوهة ======
+function securityBot() {
+  let failCount = 0;
+  const form = document.getElementById('currency-converter-form');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      const amount = parseFloat(document.getElementById('amount').value);
+      if (amount > 1000000) {
+        failCount++;
+        if (failCount >= 2) {
+          alert('تنبيه أمني: تم رصد محاولات تحويل مبالغ ضخمة!');
+        }
+      } else {
+        failCount = 0;
+      }
+    });
+  }
+}
+securityBot();
+// ====== بوت دعم: زر محادثة فورية مع الدعم ======
+function supportBot() {
+  if (document.getElementById('support-bot-btn')) return;
+  const btn = document.createElement('button');
+  btn.id = 'support-bot-btn';
+  btn.textContent = '💬 دعم فوري';
+  btn.style = 'position:fixed;bottom:100px;right:28px;z-index:99999;background:#4a4e69;color:#fff;padding:0.9rem 1.5rem;border:none;border-radius:12px;font-size:1.1rem;box-shadow:0 2px 12px #232f3e55;cursor:pointer;';
+  btn.onclick = function() {
+    let chat = document.getElementById('support-bot-chat');
+    if (!chat) {
+      chat = document.createElement('div');
+      chat.id = 'support-bot-chat';
+      chat.style = 'position:fixed;bottom:170px;right:28px;z-index:99999;background:#fff;width:320px;max-width:90vw;border-radius:14px;box-shadow:0 2px 16px #22223b44;padding:0.7rem;';
+      chat.innerHTML = `
+        <div style=\"display:flex;align-items:center;justify-content:space-between;\"><b style=\"color:#4a4e69;\">دعم عبقرينو</b><button id=\"close-support-bot\" style=\"background:none;border:none;font-size:1.2rem;cursor:pointer;\">×</button></div>
+        <div id=\"support-bot-messages\" style=\"height:120px;overflow-y:auto;background:#f7f7f7;border-radius:8px;padding:0.5rem;margin:0.7rem 0 0.5rem 0;font-size:1rem;\"></div>
+        <form id=\"support-bot-form\" style=\"display:flex;gap:6px;\">
+          <input id=\"support-bot-input\" placeholder=\"اكتب رسالتك...\" style=\"flex:1;padding:0.5rem;border-radius:8px;border:1.5px solid #ddd;\" />
+          <button style=\"background:#4a4e69;color:#fff;border:none;border-radius:8px;padding:0.5rem 1rem;\">إرسال</button>
+        </form>
+      `;
+      document.body.appendChild(chat);
+      document.getElementById('close-support-bot').onclick = ()=>chat.remove();
+      const messages = document.getElementById('support-bot-messages');
+      document.getElementById('support-bot-form').onsubmit = function(e) {
+        e.preventDefault();
+        const val = document.getElementById('support-bot-input').value.trim();
+        if (!val) return;
+        messages.innerHTML += `<div style='text-align:right;color:#222;margin-bottom:4px;'><b>أنت:</b> ${val}</div>`;
+        setTimeout(()=>{
+          messages.innerHTML += `<div style='text-align:left;color:#4a4e69;margin-bottom:4px;'><b>الدعم:</b> شكراً لتواصلك! سيتم الرد عليك قريباً أو تواصل عبر <a href='https://wa.me/96878008199' target='_blank' style='color:#25d366;'>واتساب</a>.</div>`;
+          messages.scrollTop = messages.scrollHeight;
+        }, 800);
+        document.getElementById('support-bot-input').value = '';
+      };
+    }
+  };
+  document.body.appendChild(btn);
+}
+supportBot();
+// ====== بوت لكل شيء: مساعد ذكي للمنصة ======
+function smartBot() {
+  if (document.getElementById('smart-bot-btn')) return;
+  const btn = document.createElement('button');
+  btn.id = 'smart-bot-btn';
+  btn.textContent = '🤖 مساعد عبقرينو';
+  btn.style = 'position:fixed;bottom:170px;left:28px;z-index:99999;background:#ff9900;color:#fff;padding:0.9rem 1.5rem;border:none;border-radius:12px;font-size:1.1rem;box-shadow:0 2px 12px #232f3e55;cursor:pointer;';
+  btn.onclick = function() {
+    let chat = document.getElementById('smart-bot-chat');
+    if (!chat) {
+      chat = document.createElement('div');
+      chat.id = 'smart-bot-chat';
+      chat.style = 'position:fixed;bottom:240px;left:28px;z-index:99999;background:#fff;width:320px;max-width:90vw;border-radius:14px;box-shadow:0 2px 16px #22223b44;padding:0.7rem;';
+      chat.innerHTML = `
+        <div style=\"display:flex;align-items:center;justify-content:space-between;\"><b style=\"color:#ff9900;\">مساعد عبقرينو</b><button id=\"close-smart-bot\" style=\"background:none;border:none;font-size:1.2rem;cursor:pointer;\">×</button></div>
+        <div id=\"smart-bot-messages\" style=\"height:120px;overflow-y:auto;background:#f7f7f7;border-radius:8px;padding:0.5rem;margin:0.7rem 0 0.5rem 0;font-size:1rem;\"></div>
+        <form id=\"smart-bot-form\" style=\"display:flex;gap:6px;\">
+          <input id=\"smart-bot-input\" placeholder=\"اسألني عن أي شيء...\" style=\"flex:1;padding:0.5rem;border-radius:8px;border:1.5px solid #ddd;\" />
+          <button style=\"background:#ff9900;color:#fff;border:none;border-radius:8px;padding:0.5rem 1rem;\">إرسال</button>
+        </form>
+      `;
+      document.body.appendChild(chat);
+      document.getElementById('close-smart-bot').onclick = ()=>chat.remove();
+      const messages = document.getElementById('smart-bot-messages');
+      document.getElementById('smart-bot-form').onsubmit = function(e) {
+        e.preventDefault();
+        const val = document.getElementById('smart-bot-input').value.trim();
+        if (!val) return;
+        messages.innerHTML += `<div style='text-align:right;color:#222;margin-bottom:4px;'><b>أنت:</b> ${val}</div>`;
+        setTimeout(()=>{
+          let reply = 'أنا هنا لمساعدتك في أي استفسار عن العملات أو التحويل أو الأسعار.';
+          if (/سعر|دولار|جنيه|ريال|درهم|يورو/.test(val)) reply = 'يمكنك معرفة سعر أي عملة من جدول العملات أو استخدام محول العملات.';
+          else if (/تحويل|محول/.test(val)) reply = 'استخدم محول العملات في الأعلى لتحويل أي مبلغ بين العملات.';
+          else if (/دعم|مشكلة|تواصل/.test(val)) reply = 'للدعم الفني يمكنك استخدام زر الدعم أو التواصل عبر واتساب.';
+          else if (/خبر|أخبار|تحليل/.test(val)) reply = 'تابع قسم الأخبار لمعرفة آخر أخبار وتحليلات العملات.';
+          messages.innerHTML += `<div style='text-align:left;color:#ff9900;margin-bottom:4px;'><b>المساعد:</b> ${reply}</div>`;
+          messages.scrollTop = messages.scrollHeight;
+        }, 800);
+        document.getElementById('smart-bot-input').value = '';
+      };
+    }
+  };
+  document.body.appendChild(btn);
+}
+smartBot();
+// ========== نهاية main.js ==========
+    // دعم تغيير اللغة (واجهة فقط)
+    document.addEventListener('DOMContentLoaded', function() {
+      const lang = localStorage.getItem('apqrino_lang') || 'ar';
+      fetch('translations_' + lang + '.json').then(r=>r.json()).then(dict=>{
+        document.querySelectorAll('[data-i18n]').forEach(el=>{
+          const key = el.getAttribute('data-i18n');
+          if(dict[key]) el.textContent = dict[key];
+        });
+      }).catch(()=>{});
+    });
+    window.showToast = function(msg, type = 'success') {
+      let toast = document.createElement('div');
+      toast.textContent = msg;
+      toast.style.cssText = 'background:'+(type==='success'?'#25d366':'#ff9900')+';color:#fff;padding:1rem 2.2rem;border-radius:12px;font-size:1.1rem;box-shadow:0 2px 12px #232f3e55;opacity:0.97;margin-bottom:10px;transition:opacity 0.2s;';
+      document.getElementById('toast-container').appendChild(toast);
+      setTimeout(()=>{toast.style.opacity=0.2;},2200);
+      setTimeout(()=>{toast.remove();},2600);
+    }
+  </script>
+  <!-- زر واتساب عائم -->
+  <a href="https://wa.me/96878008199" target="_blank" id="whatsapp-float" style="position:fixed;bottom:28px;right:28px;z-index:99999;background:#25d366;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px #22223b55;transition:box-shadow 0.2s;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="واتساب" style="width:36px;height:36px;" />
+  </a>
+</body>
+</html>
+<!-- ملف واحد متكامل: كل الميزات، البوتات، الإعلانات، الجافاسكريبت، التنسيقات، الربح، SEO -->
