@@ -32,20 +32,20 @@ function renderCart() {
     saveCart();
     return;
   }
-  let html = '<ul style="list-style:none;padding:0;">';
-  let total = 0;
-  cart.forEach((item, i) => {
-    let price = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0;
-    if (!isNaN(price)) total += price;
-    html += `<li style="margin-bottom:8px;">${item.name} - ${item.price} <button data-remove="${i}" style="margin-right:8px; background:#e63946; color:#fff; border:none; border-radius:4px; cursor:pointer;">حذف</button></li>`;
+  let cartItemsHtml = '<ul style="list-style:none;padding:0;">';
+  let cartTotalPrice = 0;
+  cart.forEach((item, cartItemIndex) => {
+    let itemPrice = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0;
+    if (!isNaN(itemPrice)) cartTotalPrice += itemPrice;
+    cartItemsHtml += `<li style="margin-bottom:8px;">${item.name} - ${item.price} <button data-remove="${cartItemIndex}" style="margin-right:8px; background:#e63946; color:#fff; border:none; border-radius:4px; cursor:pointer;">حذف</button></li>`;
   });
-  html += '</ul>';
-  html += `<div style="margin-top:10px;font-weight:bold;">الإجمالي: ${total ? total + ' ريال عماني' : 'مجاني'}</div>`;
-  cartList.innerHTML = html;
+  cartItemsHtml += '</ul>';
+  cartItemsHtml += `<div style="margin-top:10px;font-weight:bold;">الإجمالي: ${cartTotalPrice ? cartTotalPrice + ' ريال عماني' : 'مجاني'}</div>`;
+  cartList.innerHTML = cartItemsHtml;
   cartList.querySelectorAll('button[data-remove]').forEach(btn => {
     btn.onclick = function() {
-      const idx = parseInt(this.getAttribute('data-remove'));
-      cart.splice(idx, 1);
+      const cartItemIndex = parseInt(this.getAttribute('data-remove'));
+      cart.splice(cartItemIndex, 1);
       updateCartCount();
       renderCart();
     };
@@ -54,12 +54,12 @@ function renderCart() {
 }
 
 // تحسين البحث ليكون غير حساس لحالة الأحرف ويبحث في كل الحقول
-function normalize(str) {
+function normalizeSearchText(str) {
   return str.toLowerCase().replace(/\s+/g, '');
 }
 document.getElementById('search').addEventListener('input', function(e) {
-  const value = normalize(e.target.value.trim());
-  const filtered = games.filter(game => normalize(game.name).includes(value) || normalize(game.desc).includes(value));
+  const value = normalizeSearchText(e.target.value.trim());
+  const filtered = games.filter(game => normalizeSearchText(game.name).includes(value) || normalizeSearchText(game.desc).includes(value));
   renderGames(filtered);
 });
 
@@ -70,18 +70,18 @@ topBanner.innerHTML = '🔥 عروض خاصة اليوم فقط! شحن جواه
 document.body.insertBefore(topBanner, document.body.firstChild);
 
 // إشعارات منبثقة عصرية
-function showToast(msg) {
+function showToast(message) {
   let toast = document.createElement('div');
   toast.id = 'toast';
-  toast.textContent = msg;
+  toast.textContent = message;
   document.body.appendChild(toast);
   setTimeout(()=>{ toast.remove(); }, 2000);
 }
 
 // إضافة رسالة عند إضافة منتج للسلة
-function showToast(msg) {
+function showToast(message) {
   let toast = document.createElement('div');
-  toast.textContent = msg;
+  toast.textContent = message;
   toast.style.position = 'fixed';
   toast.style.bottom = '30px';
   toast.style.left = '50%';
@@ -96,57 +96,57 @@ function showToast(msg) {
 }
 
 // تحديث زر الإضافة للسلة ليمنع التكرار
-function renderGames(list) {
+function renderGames(filteredGames) {
   const gamesList = document.getElementById('games-list');
   gamesList.innerHTML = '';
-  list.forEach((game, idx) => {
+  filteredGames.forEach((game, gameIndex) => {
     const card = document.createElement('div');
     card.className = 'game-card';
     if (game.featured) card.style.border = '2px solid #f4a261';
-    let content = `
+    let gameCardHtml = `
       <img src="${game.image}" alt="${game.name}" />
       <h2>${game.name}</h2>
       <p>${game.desc}</p>
     `;
     if (game.offer) {
-      content += `<div style="color:#e63946;font-weight:bold;">${game.offer}</div>`;
+      gameCardHtml += `<div style="color:#e63946;font-weight:bold;">${game.offer}</div>`;
     }
     if (game.oldPrice) {
-      content += `<div><del style="color:#888;">${game.oldPrice}</del> <span style="color:#22223b;font-weight:bold;">${game.price}</span></div>`;
+      gameCardHtml += `<div><del style="color:#888;">${game.oldPrice}</del> <span style="color:#22223b;font-weight:bold;">${game.price}</span></div>`;
     } else {
-      content += `<strong>${game.price}</strong>`;
+      gameCardHtml += `<strong>${game.price}</strong>`;
     }
     // عرض التقييمات
     if (game.reviews && game.reviews.length) {
-      content += '<div style="margin-top:10px;text-align:right;">';
-      game.reviews.slice(-3).reverse().forEach(r => {
-        content += `<div style=\"background:#f7f7f7;padding:6px 10px;border-radius:6px;margin-bottom:4px;\"><span style=\"color:#f4a261;font-weight:bold;\">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</span> <span style=\"color:#222;\">${r.text}</span> <span style=\"color:#888;font-size:0.9em;\">- ${r.user}</span></div>`;
+      gameCardHtml += '<div style="margin-top:10px;text-align:right;">';
+      game.reviews.slice(-3).reverse().forEach(review => {
+        gameCardHtml += `<div style=\"background:#f7f7f7;padding:6px 10px;border-radius:6px;margin-bottom:4px;\"><span style=\"color:#f4a261;font-weight:bold;\">${'★'.repeat(review.stars)}${'☆'.repeat(5-review.stars)}</span> <span style=\"color:#222;\">${review.text}</span> <span style=\"color:#888;font-size:0.9em;\">- ${review.user}</span></div>`;
       });
-      content += '</div>';
+      gameCardHtml += '</div>';
     }
     if (game.gems) {
-      content += '<div style="margin:10px 0;">';
-      game.gems.forEach((pkg, i) => {
-        content += `<div style="margin-bottom:6px;">
-          <strong>${pkg.amount} جواهر</strong> - <span>${pkg.price || (pkg.usd + ' USD')}</span>
-          <button class="add-gems-to-cart" data-idx="${idx}" data-gem="${i}" style="margin-right:8px; background:#4a4e69; color:#fff; border:none; border-radius:6px; cursor:pointer; padding:0.3rem 0.8rem;">أضف للسلة</button>
+      gameCardHtml += '<div style="margin:10px 0;">';
+      game.gems.forEach((gemPackage, gemPackageIndex) => {
+        gameCardHtml += `<div style="margin-bottom:6px;">
+          <strong>${gemPackage.amount} جواهر</strong> - <span>${gemPackage.price || (gemPackage.usd + ' USD')}</span>
+          <button class="add-gems-to-cart" data-idx="${gameIndex}" data-gem="${gemPackageIndex}" style="margin-right:8px; background:#4a4e69; color:#fff; border:none; border-radius:6px; cursor:pointer; padding:0.3rem 0.8rem;">أضف للسلة</button>
         </div>`;
       });
-      content += '</div>';
+      gameCardHtml += '</div>';
     } else {
-      content += `<button class="add-to-cart" data-idx="${idx}" style="margin-top:8px; padding:0.5rem 1rem; background:#4a4e69; color:#fff; border:none; border-radius:6px; cursor:pointer;">أضف للسلة</button>`;
+      gameCardHtml += `<button class="add-to-cart" data-idx="${gameIndex}" style="margin-top:8px; padding:0.5rem 1rem; background:#4a4e69; color:#fff; border:none; border-radius:6px; cursor:pointer;">أضف للسلة</button>`;
     }
-    card.innerHTML = content;
+    card.innerHTML = gameCardHtml;
     gamesList.appendChild(card);
   });
   // إضافة باقات الجواهر للسلة
   document.querySelectorAll('.add-gems-to-cart').forEach(btn => {
     btn.addEventListener('click', function() {
-      const idx = this.getAttribute('data-idx');
-      const gemIdx = this.getAttribute('data-gem');
-      const game = games[idx];
-      const pkg = game.gems[gemIdx];
-      const itemName = `${game.name} (${pkg.amount} جواهر)`;
+      const gameIndex = this.getAttribute('data-idx');
+      const gemPackageIndex = this.getAttribute('data-gem');
+      const game = games[gameIndex];
+      const gemPackage = game.gems[gemPackageIndex];
+      const itemName = `${game.name} (${gemPackage.amount} جواهر)`;
       if (cart.find(item => item.name === itemName)) {
         showToast('هذه الباقة موجودة بالفعل في السلة');
         return;
@@ -154,7 +154,7 @@ function renderGames(list) {
       cart.push({
         name: itemName,
         image: game.image,
-        price: pkg.price,
+        price: gemPackage.price,
         desc: game.desc
       });
       updateCartCount();
@@ -165,12 +165,12 @@ function renderGames(list) {
   });
   document.querySelectorAll('.add-to-cart').forEach(btn => {
     btn.addEventListener('click', function() {
-      const idx = this.getAttribute('data-idx');
-      if (cart.find(item => item.name === games[idx].name)) {
+      const gameIndex = this.getAttribute('data-idx');
+      if (cart.find(item => item.name === games[gameIndex].name)) {
         showToast('هذه اللعبة موجودة بالفعل في السلة');
         return;
       }
-      cart.push(games[idx]);
+      cart.push(games[gameIndex]);
       updateCartCount();
       renderCart();
       document.getElementById('checkout-section').style.display = cart.length ? 'block' : 'none';
@@ -194,20 +194,20 @@ function renderCart() {
     saveCart();
     return;
   }
-  let html = '<ul style="list-style:none;padding:0;">';
-  let total = 0;
-  cart.forEach((item, i) => {
-    let price = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0;
-    if (!isNaN(price)) total += price;
-    html += `<li style="margin-bottom:8px;">${item.name} - ${item.price} <button data-remove="${i}" style="margin-right:8px; background:#e63946; color:#fff; border:none; border-radius:4px; cursor:pointer;">حذف</button></li>`;
+  let cartItemsHtml = '<ul style="list-style:none;padding:0;">';
+  let cartTotalPrice = 0;
+  cart.forEach((item, cartItemIndex) => {
+    let itemPrice = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0;
+    if (!isNaN(itemPrice)) cartTotalPrice += itemPrice;
+    cartItemsHtml += `<li style="margin-bottom:8px;">${item.name} - ${item.price} <button data-remove="${cartItemIndex}" style="margin-right:8px; background:#e63946; color:#fff; border:none; border-radius:4px; cursor:pointer;">حذف</button></li>`;
   });
-  html += '</ul>';
-  html += `<div style="margin-top:10px;font-weight:bold;">الإجمالي: ${total ? total + ' ريال عماني' : 'مجاني'}</div>`;
-  cartList.innerHTML = html;
+  cartItemsHtml += '</ul>';
+  cartItemsHtml += `<div style="margin-top:10px;font-weight:bold;">الإجمالي: ${cartTotalPrice ? cartTotalPrice + ' ريال عماني' : 'مجاني'}</div>`;
+  cartList.innerHTML = cartItemsHtml;
   cartList.querySelectorAll('button[data-remove]').forEach(btn => {
     btn.onclick = function() {
-      const idx = parseInt(this.getAttribute('data-remove'));
-      cart.splice(idx, 1);
+      const cartItemIndex = parseInt(this.getAttribute('data-remove'));
+      cart.splice(cartItemIndex, 1);
       updateCartCount();
       renderCart();
     };
@@ -218,13 +218,13 @@ function renderCart() {
 // تحديث سعر باقات فري فاير تلقائياً حسب سعر الدولار
 async function updateFreeFireGemsPrices() {
   try {
-    const res = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
-    const data = await res.json();
-    const usdToSDG = data.rates.SDG;
-    const ff = games.find(g => g.name.includes('فري فاير'));
-    if (ff && ff.gems) {
-      ff.gems.forEach(pkg => {
-        pkg.price = Math.round(pkg.usd * usdToSDG) + ' جنيه سوداني';
+    const fetchResponse = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+    const exchangeRateData = await fetchResponse.json();
+    const usdToSDG = exchangeRateData.rates.SDG;
+    const freefireGame = games.find(g => g.name.includes('فري فاير'));
+    if (freefireGame && freefireGame.gems) {
+      freefireGame.gems.forEach(gemPackage => {
+        gemPackage.price = Math.round(gemPackage.usd * usdToSDG) + ' جنيه سوداني';
       });
       renderGames(games);
       renderCart();
@@ -246,10 +246,10 @@ document.getElementById('checkout-btn').addEventListener('click', async function
 });
 
 // ========== واجهة تسجيل الدخول وإنشاء الحساب ========== //
-function showAuthSection(show) {
-  document.getElementById('auth-section').style.display = show ? 'block' : 'none';
-  document.getElementById('games-list').style.display = show ? 'none' : 'grid';
-  document.getElementById('checkout-section').style.display = show ? 'none' : (cart.length ? 'block' : 'none');
+function showAuthSection(shouldShow) {
+  document.getElementById('auth-section').style.display = shouldShow ? 'block' : 'none';
+  document.getElementById('games-list').style.display = shouldShow ? 'none' : 'grid';
+  document.getElementById('checkout-section').style.display = shouldShow ? 'none' : (cart.length ? 'block' : 'none');
 }
 
 // إضافة خيار "تذكرني" في نموذج تسجيل الدخول
@@ -456,7 +456,7 @@ function showOwnerPanel() {
 if (localStorage.getItem('apqrino_user')) setTimeout(showOwnerPanel, 1000);
 
 // ميزة الشراء الأوتوماتيكي (تأكيد الطلب مباشرة بعد الدفع)
-function autoPurchase(method) {
+function completePurchaseAndSaveOrder(paymentMethod) {
   // بعد الدفع الناجح (مثال: بعد العودة من بوابة الدفع)
   if (localStorage.getItem('apqrino_cart') && cart.length > 0) {
     // حفظ الطلبات في سجل المستخدم
@@ -464,7 +464,7 @@ function autoPurchase(method) {
     if (!user.orders) user.orders = [];
     const address = JSON.parse(localStorage.getItem('apqrino_address') || '{}');
     let paymentType = 'بطاقة إلكترونية';
-    if (method === 'mycashy') paymentType = 'ماي كاشي';
+    if (paymentMethod === 'mycashy') paymentType = 'ماي كاشي';
     user.orders.push({
       items: [...cart],
       date: new Date().toLocaleString('ar-EG'),
@@ -477,14 +477,14 @@ function autoPurchase(method) {
     cart = [];
     updateCartCount();
     renderCart();
-    let msg = 'تم الشراء بنجاح! الطلب قيد التنفيذ.';
-    if (method === 'mycashy') msg = 'تم تسجيل الطلب، سيتم مراجعته بعد الدفع عبر ماي كاشي.';
-    showToast(msg);
+    let message = 'تم الشراء بنجاح! الطلب قيد التنفيذ.';
+    if (paymentMethod === 'mycashy') message = 'تم تسجيل الطلب، سيتم مراجعته بعد الدفع عبر ماي كاشي.';
+    showToast(message);
   }
 }
-// استدعاء autoPurchase بعد الدفع (محاكاة)
+// استدعاء completePurchaseAndSaveOrder بعد الدفع (محاكاة)
 document.getElementById('checkout-btn').addEventListener('click', function() {
-  setTimeout(autoPurchase, 4000); // محاكاة نجاح الدفع بعد 4 ثوانٍ
+  setTimeout(completePurchaseAndSaveOrder, 4000); // محاكاة نجاح الدفع بعد 4 ثوانٍ
 });
 // عرض سجل الطلبات في الملف الشخصي
 if (document.getElementById('profile-info')) {
@@ -493,8 +493,8 @@ if (document.getElementById('profile-info')) {
     let ordersHtml = '<h3 style="color:#4a4e69;">سجل الطلبات</h3>';
     user.orders.slice(-5).reverse().forEach(order => {
       ordersHtml += `<div style=\"background:#f7f7f7;padding:8px 12px;border-radius:8px;margin-bottom:8px;\">${order.date} - <span style=\"color:green;\">${order.status}</span> <span style=\"color:#f4a261;\">(${order.payment||''})</span><ul style=\"margin:0;padding-right:18px;\">`;
-      order.items.forEach(it => {
-        ordersHtml += `<li>${it.name} (${it.price})</li>`;
+      order.items.forEach(orderItem => {
+        ordersHtml += `<li>${orderItem.name} (${orderItem.price})</li>`;
       });
       ordersHtml += '</ul>';
       if(order.address && order.address.name) {
@@ -567,7 +567,7 @@ document.getElementById('checkout-btn').addEventListener('click', showOrderSumma
 
 // 3. تتبع حالة الطلب (في الملف الشخصي)
 // تحديث سجل الطلبات ليشمل حالة الطلب
-function autoPurchase() {
+function completePurchaseAndSaveOrder() {
   if (localStorage.getItem('apqrino_cart') && cart.length > 0) {
     let user = JSON.parse(localStorage.getItem('apqrino_user') || '{}');
     if (!user.orders) user.orders = [];
@@ -593,8 +593,8 @@ if (document.getElementById('profile-info')) {
     let ordersHtml = '<h3 style="color:#4a4e69;">سجل الطلبات</h3>';
     user.orders.slice(-5).reverse().forEach(order => {
       ordersHtml += `<div style=\"background:#f7f7f7;padding:8px 12px;border-radius:8px;margin-bottom:8px;\">${order.date} - <span style=\"color:green;\">${order.status}</span> <span style=\"color:#f4a261;\">(${order.payment||''})</span><ul style=\"margin:0;padding-right:18px;\">`;
-      order.items.forEach(it => {
-        ordersHtml += `<li>${it.name} (${it.price})</li>`;
+      order.items.forEach(orderItem => {
+        ordersHtml += `<li>${orderItem.name} (${orderItem.price})</li>`;
       });
       ordersHtml += '</ul>';
       if(order.address && order.address.name) {
@@ -630,7 +630,7 @@ function showPaymentMethodModal() {
       modal.remove();
       document.getElementById('payment-message').textContent = 'سيتم تحويلك لبوابة الدفع الآمنة.';
       window.open('https://buy.stripe.com/test_00g7uQ2wA2wQ0yQeUU', '_blank');
-      setTimeout(autoPurchase, 4000); // محاكاة نجاح الدفع بعد 4 ثوانٍ
+      setTimeout(completePurchaseAndSaveOrder, 4000); // محاكاة نجاح الدفع بعد 4 ثوانٍ
     };
     document.getElementById('pay-bankak').onclick = function() {
       modal.remove();
@@ -641,7 +641,7 @@ function showPaymentMethodModal() {
       modal.remove();
       document.getElementById('payment-message').innerHTML = '<div style="color:#222;background:#fff3e0;padding:1rem 1.2rem;border-radius:10px;margin:1rem auto;max-width:350px;">يرجى الدفع عبر تطبيق <b>ماي كاشي</b> إلى رقم الحساب التالي:<br><span style="color:#f4a261;font-size:1.2rem;font-weight:bold;direction:ltr;">635901</span><br>ثم تأكيد العملية من خلال التواصل مع الدعم.</div>';
       setTimeout(function() {
-        autoPurchase('mycashy');
+        completePurchaseAndSaveOrder('mycashy');
       }, 4000); // محاكاة نجاح الدفع بعد 4 ثوانٍ
     };
   }
@@ -657,30 +657,30 @@ if (checkoutBtn) {
 }
 
 // إضافة منطق إظهار نموذج بنكك والتعامل مع بيانات التحويل
-const bankakBtn = document.getElementById('bankak-btn');
-const bankakForm = document.getElementById('bankak-form');
-const submitBankak = document.getElementById('submit-bankak');
-const bankakMessage = document.getElementById('bankak-message');
+const bankakPaymentButton = document.getElementById('bankak-btn');
+const bankakPaymentForm = document.getElementById('bankak-form');
+const submitBankakPaymentButton = document.getElementById('submit-bankak');
+const bankakPaymentMessage = document.getElementById('bankak-message');
 
-if (bankakBtn && bankakForm && submitBankak) {
-  bankakBtn.onclick = () => {
-    bankakForm.style.display = bankakForm.style.display === 'none' ? 'block' : 'none';
+if (bankakPaymentButton && bankakPaymentForm && submitBankakPaymentButton) {
+  bankakPaymentButton.onclick = () => {
+    bankakPaymentForm.style.display = bankakPaymentForm.style.display === 'none' ? 'block' : 'none';
   };
-  submitBankak.onclick = (e) => {
+  submitBankakPaymentButton.onclick = (e) => {
     e.preventDefault();
-    const txid = document.getElementById('bankak-txid').value.trim();
-    const proof = document.getElementById('bankak-proof').files[0];
-    if (!txid) {
-      bankakMessage.style.color = 'red';
-      bankakMessage.textContent = 'يرجى إدخال رقم العملية البنكية.';
+    const transactionId = document.getElementById('bankak-txid').value.trim();
+    const paymentProofFile = document.getElementById('bankak-proof').files[0];
+    if (!transactionId) {
+      bankakPaymentMessage.style.color = 'red';
+      bankakPaymentMessage.textContent = 'يرجى إدخال رقم العملية البنكية.';
       return;
     }
-    bankakMessage.style.color = 'green';
-    bankakMessage.textContent = 'تم استلام بيانات التحويل. سيتم مراجعتها من الإدارة.';
+    bankakPaymentMessage.style.color = 'green';
+    bankakPaymentMessage.textContent = 'تم استلام بيانات التحويل. سيتم مراجعتها من الإدارة.';
     // هنا يمكنك حفظ بيانات التحويل في localStorage أو إرسالها للسيرفر لاحقاً
     document.getElementById('bankak-txid').value = '';
     document.getElementById('bankak-proof').value = '';
-    setTimeout(() => { bankakForm.style.display = 'none'; bankakMessage.textContent = ''; }, 2500);
+    setTimeout(() => { bankakPaymentForm.style.display = 'none'; bankakPaymentMessage.textContent = ''; }, 2500);
   };
 }
 
@@ -713,11 +713,11 @@ function updateAllPrices() {
 async function updateCurrencyRates() {
   try {
     // مثال: استخدام API مجاني (exchangerate-api.com أو أي مصدر آخر)
-    const res = await fetch('https://api.exchangerate-api.com/v4/latest/SDG');
-    const data = await res.json();
-    if (data && data.rates) {
+    const fetchResponse = await fetch('https://api.exchangerate-api.com/v4/latest/SDG');
+    const exchangeRateData = await fetchResponse.json();
+    if (exchangeRateData && exchangeRateData.rates) {
       // تحديث سعر الريال العماني مقابل الجنيه السوداني
-      currencyRates.OMR = data.rates.OMR || currencyRates.OMR;
+      currencyRates.OMR = exchangeRateData.rates.OMR || currencyRates.OMR;
       localStorage.setItem('apqrino_rates', JSON.stringify(currencyRates));
       updateAllPrices();
     }
@@ -726,9 +726,9 @@ async function updateCurrencyRates() {
   }
 }
 // تحميل أسعار محفوظة عند بدء التشغيل
-const savedRates = localStorage.getItem('apqrino_rates');
-if (savedRates) {
-  Object.assign(currencyRates, JSON.parse(savedRates));
+const savedCurrencyRates = localStorage.getItem('apqrino_rates');
+if (savedCurrencyRates) {
+  Object.assign(currencyRates, JSON.parse(savedCurrencyRates));
 }
 updateCurrencyRates();
 setInterval(updateCurrencyRates, 1000 * 60 * 60 * 6); // يحدث كل 6 ساعات
@@ -753,7 +753,7 @@ if (ffForm) {
   ffForm.onsubmit = function(e) {
     e.preventDefault();
     const userId = document.getElementById('ff-userid').value.trim();
-    const pkg = document.getElementById('ff-package').value;
+    const selectedPackageAmount = document.getElementById('ff-package').value;
     if (!userId) {
       document.getElementById('ff-message').style.color = 'red';
       document.getElementById('ff-message').textContent = 'يرجى إدخال معرف اللاعب.';
@@ -765,20 +765,20 @@ if (ffForm) {
       SDG: { '100': 1500, '210': 2900, '530': 6900, '1080': 12900, '2200': 24900 },
       OMR: { '100': 1.2, '210': 2.3, '530': 5.5, '1080': 10.5, '2200': 20 }
     };
-    const price = prices[currency][pkg];
+    const price = prices[currency][selectedPackageAmount];
     // إضافة للسلة
-    const item = {
-      id: 'ff-' + pkg,
-      name: `فري فاير - ${pkg} جوهرة`,
+    const cartItem = {
+      id: 'ff-' + selectedPackageAmount,
+      name: `فري فاير - ${selectedPackageAmount} جوهرة`,
       userId,
       price,
       currency,
       qty: 1,
       type: 'freefire'
     };
-    let cart = JSON.parse(localStorage.getItem('apqrino_cart') || '[]');
-    cart.push(item);
-    localStorage.setItem('apqrino_cart', JSON.stringify(cart));
+    let currentCart = JSON.parse(localStorage.getItem('apqrino_cart') || '[]');
+    currentCart.push(cartItem);
+    localStorage.setItem('apqrino_cart', JSON.stringify(currentCart));
     document.getElementById('ff-message').style.color = 'green';
     document.getElementById('ff-message').textContent = 'تمت إضافة الباقة للسلة بنجاح!';
     updateCartCount && updateCartCount();
