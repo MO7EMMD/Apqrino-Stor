@@ -18,49 +18,18 @@ function updateCartCount() {
   saveCart();
 }
 
-function renderCart() {
-  let cartSection = document.getElementById('checkout-section');
-  let cartList = document.getElementById('cart-list');
-  if (!cartList) {
-    cartList = document.createElement('div');
-    cartList.id = 'cart-list';
-    cartSection.insertBefore(cartList, cartSection.firstChild);
-  }
-  if (cart.length === 0) {
-    cartList.innerHTML = '<p>سلة المشتريات فارغة.</p>';
-    document.getElementById('checkout-section').style.display = 'none';
-    saveCart();
-    return;
-  }
-  let html = '<ul style="list-style:none;padding:0;">';
-  let total = 0;
-  cart.forEach((item, i) => {
-    let price = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0;
-    if (!isNaN(price)) total += price;
-    html += `<li style="margin-bottom:8px;">${item.name} - ${item.price} <button data-remove="${i}" style="margin-right:8px; background:#e63946; color:#fff; border:none; border-radius:4px; cursor:pointer;">حذف</button></li>`;
-  });
-  html += '</ul>';
-  html += `<div style="margin-top:10px;font-weight:bold;">الإجمالي: ${total ? total + ' ريال عماني' : 'مجاني'}</div>`;
-  cartList.innerHTML = html;
-  cartList.querySelectorAll('button[data-remove]').forEach(btn => {
-    btn.onclick = function() {
-      const idx = parseInt(this.getAttribute('data-remove'));
-      cart.splice(idx, 1);
-      updateCartCount();
-      renderCart();
-    };
-  });
-  saveCart();
-}
-
 // تحسين البحث ليكون غير حساس لحالة الأحرف ويبحث في كل الحقول
 function normalize(str) {
   return str.toLowerCase().replace(/\s+/g, '');
 }
+let searchDebounceTimer;
 document.getElementById('search').addEventListener('input', function(e) {
-  const value = normalize(e.target.value.trim());
-  const filtered = games.filter(game => normalize(game.name).includes(value) || normalize(game.desc).includes(value));
-  renderGames(filtered);
+  clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(function() {
+    const value = normalize(e.target.value.trim());
+    const filtered = games.filter(game => normalize(game.name).includes(value) || normalize(game.desc).includes(value));
+    renderGames(filtered);
+  }, 300);
 });
 
 // شريط مميز أعلى الصفحة
@@ -70,15 +39,6 @@ topBanner.innerHTML = '🔥 عروض خاصة اليوم فقط! شحن جواه
 document.body.insertBefore(topBanner, document.body.firstChild);
 
 // إشعارات منبثقة عصرية
-function showToast(msg) {
-  let toast = document.createElement('div');
-  toast.id = 'toast';
-  toast.textContent = msg;
-  document.body.appendChild(toast);
-  setTimeout(()=>{ toast.remove(); }, 2000);
-}
-
-// إضافة رسالة عند إضافة منتج للسلة
 function showToast(msg) {
   let toast = document.createElement('div');
   toast.textContent = msg;
@@ -232,18 +192,6 @@ async function updateFreeFireGemsPrices() {
   } catch (e) {}
 }
 updateFreeFireGemsPrices();
-
-// Stripe integration (test mode)
-document.getElementById('checkout-btn').addEventListener('click', async function() {
-  if (cart.length === 0) return;
-  document.getElementById('payment-message').textContent = 'جاري تحويلك لبوابة الدفع...';
-  // في التطبيق الحقيقي يجب استدعاء backend لإنشاء جلسة دفع Stripe
-  // هنا سنوجه المستخدم لصفحة دفع تجريبية
-  window.open('https://buy.stripe.com/test_00g7uQ2wA2wQ0yQeUU', '_blank');
-  setTimeout(()=>{
-    document.getElementById('payment-message').textContent = 'تم إرسال الطلب لبوابة الدفع.';
-  }, 2000);
-});
 
 // ========== واجهة تسجيل الدخول وإنشاء الحساب ========== //
 function showAuthSection(show) {
@@ -482,30 +430,6 @@ function autoPurchase(method) {
     showToast(msg);
   }
 }
-// استدعاء autoPurchase بعد الدفع (محاكاة)
-document.getElementById('checkout-btn').addEventListener('click', function() {
-  setTimeout(autoPurchase, 4000); // محاكاة نجاح الدفع بعد 4 ثوانٍ
-});
-// عرض سجل الطلبات في الملف الشخصي
-if (document.getElementById('profile-info')) {
-  const user = JSON.parse(localStorage.getItem('apqrino_user') || '{}');
-  if (user.orders && user.orders.length) {
-    let ordersHtml = '<h3 style="color:#4a4e69;">سجل الطلبات</h3>';
-    user.orders.slice(-5).reverse().forEach(order => {
-      ordersHtml += `<div style=\"background:#f7f7f7;padding:8px 12px;border-radius:8px;margin-bottom:8px;\">${order.date} - <span style=\"color:green;\">${order.status}</span> <span style=\"color:#f4a261;\">(${order.payment||''})</span><ul style=\"margin:0;padding-right:18px;\">`;
-      order.items.forEach(it => {
-        ordersHtml += `<li>${it.name} (${it.price})</li>`;
-      });
-      ordersHtml += '</ul>';
-      if(order.address && order.address.name) {
-        ordersHtml += `<div style=\"color:#4a4e69;font-size:0.95em;\">${order.address.name}, ${order.address.city}, ${order.address.details}, ${order.address.phone}</div>`;
-      }
-      ordersHtml += '</div>';
-    });
-    document.getElementById('profile-info').innerHTML += ordersHtml;
-  }
-}
-
 // ========== ميزات الشراء العالمية ========== //
 // 1. اختيار عنوان التوصيل
 function showAddressModal() {
@@ -563,30 +487,8 @@ function showOrderSummary() {
   }
   alert(summary);
 }
-document.getElementById('checkout-btn').addEventListener('click', showOrderSummary);
 
 // 3. تتبع حالة الطلب (في الملف الشخصي)
-// تحديث سجل الطلبات ليشمل حالة الطلب
-function autoPurchase() {
-  if (localStorage.getItem('apqrino_cart') && cart.length > 0) {
-    let user = JSON.parse(localStorage.getItem('apqrino_user') || '{}');
-    if (!user.orders) user.orders = [];
-    const address = JSON.parse(localStorage.getItem('apqrino_address') || '{}');
-    user.orders.push({
-      items: [...cart],
-      date: new Date().toLocaleString('ar-EG'),
-      status: 'قيد التنفيذ',
-      address,
-      payment: 'بطاقة إلكترونية'
-    });
-    localStorage.setItem('apqrino_user', JSON.stringify(user));
-    cart = [];
-    updateCartCount();
-    renderCart();
-    showToast('تم الشراء بنجاح! الطلب قيد التنفيذ.');
-  }
-}
-// تحديث عرض سجل الطلبات ليشمل العنوان وحالة الطلب
 if (document.getElementById('profile-info')) {
   const user = JSON.parse(localStorage.getItem('apqrino_user') || '{}');
   if (user.orders && user.orders.length) {
@@ -776,9 +678,7 @@ if (ffForm) {
       qty: 1,
       type: 'freefire'
     };
-    let cart = JSON.parse(localStorage.getItem('apqrino_cart') || '[]');
     cart.push(item);
-    localStorage.setItem('apqrino_cart', JSON.stringify(cart));
     document.getElementById('ff-message').style.color = 'green';
     document.getElementById('ff-message').textContent = 'تمت إضافة الباقة للسلة بنجاح!';
     updateCartCount && updateCartCount();
